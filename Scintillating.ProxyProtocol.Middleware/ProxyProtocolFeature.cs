@@ -9,8 +9,11 @@ internal class ProxyProtocolFeature : IProxyProtocolFeature
 {
     public ProxyProtocolHeader ProtocolHeader { get; }
 
-    public ProxyProtocolFeature(ConnectionContext connectionContext!!, ProxyProtocolHeader protocolHeader!!, ReadOnlyMemory<byte> applicationProtocol)
+    public ProxyProtocolFeature(ConnectionContext connectionContext, ProxyProtocolHeader protocolHeader, ReadOnlyMemory<byte> applicationProtocol)
     {
+        ArgumentNullException.ThrowIfNull(connectionContext);
+        ArgumentNullException.ThrowIfNull(protocolHeader);
+
         ConnectionId = connectionContext.ConnectionId;
         ProtocolHeader = protocolHeader;
 

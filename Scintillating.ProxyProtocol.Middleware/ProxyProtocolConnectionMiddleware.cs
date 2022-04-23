@@ -17,8 +17,12 @@ internal partial class ProxyProtocolConnectionMiddleware
     private readonly bool _tlsOffloadEnabled;
     private readonly bool _detectApplicationProtocolByH2Preface;
 
-    public ProxyProtocolConnectionMiddleware(ConnectionDelegate next!!, ILogger logger!!, ProxyProtocolOptions options!!)
+    public ProxyProtocolConnectionMiddleware(ConnectionDelegate next, ILogger logger, ProxyProtocolOptions options)
     {
+        ArgumentNullException.ThrowIfNull(next);
+        ArgumentNullException.ThrowIfNull(logger);
+        ArgumentNullException.ThrowIfNull(options);
+
         _next = next;
         _logger = logger;
         _connectTimeout = options.ConnectTimeout;

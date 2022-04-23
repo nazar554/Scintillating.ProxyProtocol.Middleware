@@ -15,8 +15,9 @@ public static class ListenOptionsProxyProtocolExtensions
     /// </summary>
     /// <param name="listenOptions">Listen options for the endpoint.</param>
     /// <returns>The same options instance for method chaining.</returns>
-    public static ListenOptions UseProxyProtocol(this ListenOptions listenOptions!!)
+    public static ListenOptions UseProxyProtocol(this ListenOptions listenOptions)
     {
+        ArgumentNullException.ThrowIfNull(listenOptions);
         var options = listenOptions.KestrelServerOptions.ApplicationServices
             .GetService<IOptions<ProxyProtocolOptions>>();
 
@@ -30,8 +31,10 @@ public static class ListenOptionsProxyProtocolExtensions
     /// <param name="listenOptions">Listen options for the endpoint.</param>
     /// <param name="configureOptions">Action to configure the options for PROXY protocol connection middleware.</param>
     /// <returns>The same options instance for method chaining.</returns>
-    public static ListenOptions UseProxyProtocol(this ListenOptions listenOptions!!, Action<ProxyProtocolOptions> configureOptions!!)
+    public static ListenOptions UseProxyProtocol(this ListenOptions listenOptions, Action<ProxyProtocolOptions> configureOptions)
     {
+        ArgumentNullException.ThrowIfNull(listenOptions);
+        ArgumentNullException.ThrowIfNull(configureOptions);
         var proxyProtocolOptions = new ProxyProtocolOptions();
         configureOptions(proxyProtocolOptions);
         return listenOptions.UseProxyProtocol(proxyProtocolOptions);
@@ -43,8 +46,11 @@ public static class ListenOptionsProxyProtocolExtensions
     /// <param name="listenOptions">Listen options for the endpoint.</param>
     /// <param name="proxyProtocolOptions">Options for PROXY protocol connection middleware.</param>
     /// <returns>The same options instance for method chaining.</returns>
-    public static ListenOptions UseProxyProtocol(this ListenOptions listenOptions!!, ProxyProtocolOptions proxyProtocolOptions!!)
+    public static ListenOptions UseProxyProtocol(this ListenOptions listenOptions, ProxyProtocolOptions proxyProtocolOptions)
     {
+        ArgumentNullException.ThrowIfNull(listenOptions);
+        ArgumentNullException.ThrowIfNull(proxyProtocolOptions);
+
         var loggerFactory = listenOptions.KestrelServerOptions.ApplicationServices
             .GetRequiredService<ILoggerFactory>();
 
