@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Features;
 using Microsoft.Extensions.Logging;
 using Scintillating.ProxyProtocol.Parser;
+using Scintillating.ProxyProtocol.Parser.Tlv;
 using System.Buffers;
 using System.IO.Pipelines;
 
@@ -93,7 +94,12 @@ internal partial class ProxyProtocolConnectionMiddleware
                 ProxyMiddlewareLogger.SettingHttpConnectionFeature(_logger, connectionId);
                 context.Features.Set<IHttpConnectionFeature>(proxyProtocolFeature);
 
-                if (_tlsOffloadEnabled)
+                var sslDetails = GetSslDetails(proxyProtocolHeader);
+                // TODO: Add method to lookup client certificate by CN (if configured to do so)
+                // Requires to choose a certificate store, and specify required flags
+                // As well as checking the verify flag
+
+                if (_tlsOffloadEnabled || sslDetails is not null)
                 {
                     ProxyMiddlewareLogger.SettingTlsConnectionFeature(_logger, connectionId);
                     context.Features.Set<ITlsConnectionFeature>(proxyProtocolFeature);
@@ -132,6 +138,36 @@ internal partial class ProxyProtocolConnectionMiddleware
         await _next(context).ConfigureAwait(false);
     }
 
+    private static ProxyProtocolTlvSsl? GetSslDetails(ProxyProtocolHeader proxyProtocolHeader)
+    {
+        var typeLengthValues = proxyProtocolHeader.TypeLengthValues;
+        int count = typeLengthValues.Count;
+
+        for (int i = 0; i < count; ++i)
+        {
+            if (typeLengthValues[i] is ProxyProtocolTlvSsl sslDetails)
+            {
+                return sslDetails;
+            }
+        }
+        return null;
+    }
+
+    private static void AdjustAlpn(ProxyProtocolHeader proxyProtocolHeader, ref ReadOnlyMemory<byte>? applicationProtocol)
+    {
+        var typeLengthValues = proxyProtocolHeader.TypeLengthValues;
+        int count = typeLengthValues.Count;
+
+        for (int i = 0; i < count; ++i)
+        {
+            if (typeLengthValues[i] is ProxyProtocolTlvAlpn alpn)
+            {
+                applicationProtocol = alpn.Value.Protocol;
+                break;
+            }
+        }
+    }
+
     private bool TryParse(string connectionId, PipeReader pipeReader, in ReadResult readResult, ref ProxyProtocolParser parser,
         ref ReadOnlyMemory<byte>? applicationProtocol,
         ref ProxyProtocolHeader proxyProtocolHeader)
@@ -151,6 +187,10 @@ internal partial class ProxyProtocolConnectionMiddleware
             if (parser.TryParse(readResult.Buffer, out var advanceTo, out var value))
             {
                 ProxyMiddlewareLogger.ProxyHeaderParsed(_logger, connectionId, value);
+                if (!_detectApplicationProtocolByH2Preface && (!applicationProtocol.HasValue || applicationProtocol.Value.IsEmpty))
+                {
+                    AdjustAlpn(value, ref applicationProtocol);
+                }
                 proxyProtocolHeader = value;
                 success = true;
             }

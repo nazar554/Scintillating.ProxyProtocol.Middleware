@@ -45,7 +45,7 @@
       <Version>3.4.255</Version>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Scintillating.ProxyProtocol.Parser" Version="0.2.2" />
+    <PackageReference Include="Scintillating.ProxyProtocol.Parser" Version="0.3.0" />
   </ItemGroup>
 
   <ItemGroup>

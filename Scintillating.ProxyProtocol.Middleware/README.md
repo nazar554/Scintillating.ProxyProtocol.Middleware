@@ -4,7 +4,7 @@
 
 * Note that it's impossible to accept both PROXY and non-PROXY connections on same port (specification forbids it).
 * If your proxy also does TLS offload then it's possible to force the connection to be detected as TLS.
-* When TLS-offloading `PP2_TYPE_ALPN` is required to detect ALPN for HTTP2 connections, however this library doesn't yet support it. You can use `DetectApplicationProtocolByH2Preface` as a workaround to detect protocol by presence of H2 client preamble, or use a single protocol (`Http1`/`Http2`) instead.
+* When TLS-offloading `PP2_TYPE_ALPN` is required to detect ALPN for HTTP2 connections, however not every sender supports it. You can use `DetectApplicationProtocolByH2Preface` as a workaround to detect protocol by presence of H2 client preamble, or use a single protocol (`Http1`/`Http2`) instead.
 * `IProxyProtocolFeature` will be set for all connections utilizing PROXY protocol.
 
 ```csharp
@@ -66,8 +66,7 @@ app.MapGet("/", (HttpContext context) =>
 
     context.Response.Headers["X-Request-IsHttps"] = context.Request.IsHttps.ToString();
     return new { ProxyProtocol = feature?.ToString() };
-})
-.WithName("GetWeatherForecast");
+});
 
 app.MapWhen(c => c.Features.Get<IProxyProtocolFeature>() is null, b =>
 {

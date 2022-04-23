@@ -26,9 +26,9 @@
       },
       "Scintillating.ProxyProtocol.Parser": {
         "type": "Direct",
-        "requested": "[0.2.2, )",
-        "resolved": "0.2.2",
-        "contentHash": "UxjuUPETy2LVOJpcwQsCaGhwG01XzGnwTv62tAiQp4m00uB+aYmDIYt79jv2MeeGg01aEVZGNBCE+240LG/eaQ=="
+        "requested": "[0.3.0, )",
+        "resolved": "0.3.0",
+        "contentHash": "jTVQueiouNQaJi8p26El8g+M7aZxP3ZJkQJYY3t6gz3DN40cEVFgqabb5u2SxN1AOLJPQGXBB19mce4vhhe6zQ=="
       },
       "Microsoft.Build.Tasks.Git": {
         "type": "Transitive",
