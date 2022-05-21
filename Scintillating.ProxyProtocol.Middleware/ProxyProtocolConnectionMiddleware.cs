@@ -98,16 +98,18 @@ internal partial class ProxyProtocolConnectionMiddleware
                 ProxyMiddlewareLogger.SettingHttpConnectionFeature(_logger, connectionId);
                 context.Features.Set<IHttpConnectionFeature>(proxyProtocolFeature);
 
-                var sslDetails = GetSslDetails(proxyProtocolHeader);
+                bool hasAlpn = !proxyProtocolFeature.ApplicationProtocol.IsEmpty;
+                
+                // var sslDetails = GetSslDetails(proxyProtocolHeader);
                 // TODO: Add method to lookup client certificate by CN (if configured to do so)
                 // Requires to choose a certificate store, and specify required flags
                 // As well as checking the verify flag
 
-                if (_tlsOffloadEnabled || sslDetails is not null)
+                if (_tlsOffloadEnabled || hasAlpn || GetSslDetails(proxyProtocolHeader) is not null)
                 {
                     ProxyMiddlewareLogger.SettingTlsConnectionFeature(_logger, connectionId);
                     context.Features.Set<ITlsConnectionFeature>(proxyProtocolFeature);
-                    if (!proxyProtocolFeature.ApplicationProtocol.IsEmpty)
+                    if (hasAlpn)
                     {
                         ProxyMiddlewareLogger.SettingTlsAlpnFeature(_logger, connectionId);
                         context.Features.Set<ITlsApplicationProtocolFeature>(proxyProtocolFeature);
