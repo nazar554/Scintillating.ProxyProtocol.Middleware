@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Features;
 using Scintillating.ProxyProtocol.Parser;
 using System.Net;
+using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Scintillating.ProxyProtocol.Middleware;
@@ -9,7 +11,7 @@ internal class ProxyProtocolFeature : IProxyProtocolFeature
 {
     public ProxyProtocolHeader ProtocolHeader { get; }
 
-    public ProxyProtocolFeature(ConnectionContext connectionContext, ProxyProtocolHeader protocolHeader, ReadOnlyMemory<byte> applicationProtocol)
+    public ProxyProtocolFeature(ConnectionContext connectionContext, ProxyProtocolHeader protocolHeader, SslApplicationProtocol applicationProtocol)
     {
         ArgumentNullException.ThrowIfNull(connectionContext);
         ArgumentNullException.ThrowIfNull(protocolHeader);
@@ -49,7 +51,9 @@ internal class ProxyProtocolFeature : IProxyProtocolFeature
 
     public X509Certificate2? ClientCertificate { get; set; }
 
-    public ReadOnlyMemory<byte> ApplicationProtocol { get; }
+    public SslApplicationProtocol ApplicationProtocol { get; }
+
+    ReadOnlyMemory<byte> ITlsApplicationProtocolFeature.ApplicationProtocol => ApplicationProtocol.Protocol;
 
     public Task<X509Certificate2?> GetClientCertificateAsync(CancellationToken cancellationToken) => Task.FromResult<X509Certificate2?>(null);
 }

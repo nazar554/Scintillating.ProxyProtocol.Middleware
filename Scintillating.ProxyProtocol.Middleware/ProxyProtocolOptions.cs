@@ -1,4 +1,6 @@
-﻿namespace Scintillating.ProxyProtocol.Middleware;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Scintillating.ProxyProtocol.Middleware;
 
 /// <summary>
 /// Settings that configure the PROXY protocol connection middleware.
@@ -13,10 +15,12 @@ public class ProxyProtocolOptions
     /// <summary>
     /// Timeout for reading the PROXY protocol header.
     /// </summary>
+    [Range(typeof(TimeSpan), "00:00:00", "10675199.02:48:05.4775807", ConvertValueInInvariantCulture = true, ParseLimitsInInvariantCulture = true)]
     public TimeSpan? ConnectTimeout { get; init; }
 
     /// <summary>
     /// Options for TLS-offloaded connections.
     /// </summary>
-    public ProxyProtocolTlsOffloadOptions? TlsOffloadOptions { get; init; }
+    [EnumDataType(typeof(ProxyProtocolTlsOffloadOptions))]
+    public ProxyProtocolTlsOffloadOptions TlsOffloadOptions { get; init; }
 }

@@ -21,7 +21,25 @@ public static class ListenOptionsProxyProtocolExtensions
         var options = listenOptions.KestrelServerOptions.ApplicationServices
             .GetService<IOptions<ProxyProtocolOptions>>();
 
-        var proxyProtocolOptions = options?.Value ?? new ProxyProtocolOptions();
+        var proxyProtocolOptions = options is null ? new ProxyProtocolOptions() : options.Value;
+        return listenOptions.UseProxyProtocol(proxyProtocolOptions);
+    }
+
+    /// <summary>
+    /// Enable &amp; require PROXY protocol processing on this endpoint with named configuration.
+    /// </summary>
+    /// <param name="listenOptions">Listen options for the endpoint.</param>
+    /// <param name="optionsName">Name of the options instance</param>
+    /// <returns>The same options instance for method chaining.</returns>
+    public static ListenOptions UseProxyProtocol(this ListenOptions listenOptions, string optionsName)
+    {
+        ArgumentNullException.ThrowIfNull(listenOptions);
+        ArgumentNullException.ThrowIfNull(optionsName);
+
+        var optionsMonitor = listenOptions.KestrelServerOptions.ApplicationServices
+            .GetRequiredService<IOptionsMonitor<ProxyProtocolOptions>>();
+
+        var proxyProtocolOptions = optionsMonitor.Get(optionsName);
         return listenOptions.UseProxyProtocol(proxyProtocolOptions);
     }
 

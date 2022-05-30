@@ -159,4 +159,32 @@ internal static partial class ProxyMiddlewareLogger
       Message = "Connection id \"{connectionId}\" protocol header parsed {proxyProtocolHeader}."
     )]
     public static partial void ProxyHeaderParsed(ILogger logger, string connectionId, ProxyProtocolHeader proxyProtocolHeader);
+
+    [LoggerMessage(
+      EventId = 22,
+      Level = LogLevel.Trace,
+      Message = "Connection id \"{connectionId}\" detected TLS TLV PP2_TYPE_ALPN at {index}."
+    )]
+    public static partial void DetectedAlpnTLV(ILogger logger, string connectionId, int index);
+
+    [LoggerMessage(
+      EventId = 23,
+      Level = LogLevel.Trace,
+      Message = "Connection id \"{connectionId}\" has no TLV PP2_TYPE_ALPN."
+    )]
+    public static partial void NoDetectedAlpnTLV(ILogger logger, string connectionId);
+
+    [LoggerMessage(
+      EventId = 24,
+      Level = LogLevel.Trace,
+      Message = "Connection id \"{connectionId}\" detected TLV PP2_TYPE_SSL at {index}."
+    )]
+    public static partial void DetectedSslTLV(ILogger logger, string connectionId, int index);
+
+    [LoggerMessage(
+      EventId = 25,
+      Level = LogLevel.Trace,
+      Message = "Connection id \"{connectionId}\" has no TLV PP2_TYPE_SSL."
+    )]
+    public static partial void NoDetectedSslTLV(ILogger logger, string connectionId);
 }

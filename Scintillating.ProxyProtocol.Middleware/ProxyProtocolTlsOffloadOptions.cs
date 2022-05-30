@@ -1,24 +1,22 @@
-﻿using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Server.Kestrel.Core.Features;
-
-namespace Scintillating.ProxyProtocol.Middleware;
+﻿namespace Scintillating.ProxyProtocol.Middleware;
 
 /// <summary>
 /// Options for TLS-offloaded connections.
 /// </summary>
-public class ProxyProtocolTlsOffloadOptions
+public enum ProxyProtocolTlsOffloadOptions
 {
     /// <summary>
-    /// Set to true in order to enable <see cref="ITlsConnectionFeature"/> for all PROXY protocol connections, to mark them as secure.
+    /// Detect the security status of connection from PROXY protocol header.
     /// </summary>
-    public bool Enabled { get; init; }
+    Default,
 
     /// <summary>
-    /// Set to true in order to enable <see cref="ITlsApplicationProtocolFeature"/> by examining the request for H2 client preamble.
+    /// Always mark connections as secure.
     /// </summary>
-    /// <remarks>
-    /// <para>This can be used if proxy doesn't support PP2_TYPE_ALPN</para>
-    /// <para>Requires setting <see cref="Enabled"/> to true.</para>
-    /// </remarks>
-    public bool DetectApplicationProtocolByH2Preface { get; init; }
+    AlwaysEnabled,
+
+    /// <summary>
+    /// Always mark connections as secure and try to detect TLS ALPN.
+    /// </summary>
+    AlwaysEnabledWithAlpnDetection,
 }
