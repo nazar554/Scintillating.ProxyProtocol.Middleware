@@ -20,15 +20,15 @@
       },
       "Nerdbank.GitVersioning": {
         "type": "Direct",
-        "requested": "[3.5.107, )",
-        "resolved": "3.5.107",
-        "contentHash": "oMWWTe9aTUJ1CwU4fpfpduqx7Hzve320PU2SUyFFDzlHXTdjEouWHtFrRbaXV4LysL0lBtlzJM/nmHm47p2KWw=="
+        "requested": "[3.5.109, )",
+        "resolved": "3.5.109",
+        "contentHash": "tKA1XJ5U2Ytk+u2/5sGNa04Pw6z9noYmqbpmHpjvbwJTtIalqsQjnwT4RQKSDTTIznHBbKxzv3HVh8QD28Qk+g=="
       },
       "Scintillating.ProxyProtocol.Parser": {
         "type": "Direct",
-        "requested": "[0.4.0, )",
-        "resolved": "0.4.0",
-        "contentHash": "5VSd8ANzu8KFO7DT3KfUk503eCC/+NXjWqkp3Hmu9cksaT0CeoiCCOPRIfViAdca044lkNNyQ1nJ/wUaW46R7g=="
+        "requested": "[0.5.0, )",
+        "resolved": "0.5.0",
+        "contentHash": "2VH5ZFaj38g6T7wk+zwjzzjiVkto+rosRRQnYIgSVqnMbgdCXRevyNUeRBTPhzBW3KP/4xqv5lp/hCOPMj126g=="
       },
       "Microsoft.Build.Tasks.Git": {
         "type": "Transitive",
