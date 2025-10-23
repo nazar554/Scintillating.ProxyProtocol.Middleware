@@ -1,9 +1,9 @@
 <Project>
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>12.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <WarningsAsErrors>nullable</WarningsAsErrors>
     <WarningLevel>9999</WarningLevel>
     <NoWarn>IDE1006,$(NoWarn)</NoWarn>
